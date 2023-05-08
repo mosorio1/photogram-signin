@@ -8,12 +8,12 @@ class PhotosController < ApplicationController
     user_id = session.fetch(:user_id)
     image = params.fetch("input_image")
     caption = params.fetch("input_caption")
-    photo = Photo.new
-    photo.owner_id = user_id
-    photo.image = image
-    photo.caption = caption
-    photo.save
-    redirect_to("/photos/#{photo.id}")
+    @photo = Photo.new
+    @photo.owner_id = user_id
+    @photo.image = image
+    @photo.caption = caption
+    @photo.save
+    redirect_to("/photos/#{@photo.id}")
   end
 
   def show

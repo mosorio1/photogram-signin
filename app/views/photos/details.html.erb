@@ -21,6 +21,9 @@
     2 months ago
   </dd>
 
+  <dd>
+    <% if session.fetch( :user_id) == @photo.owner_id %>
+  </dd>
   <dt>Edit photo</dt>
   <dd>
     <form action="/update_photo/<%= @photo.id %>">
@@ -33,6 +36,7 @@
       <button>Update photo</button>
     </form>
   </dd>
+  <% end %>
 
   <dt>Delete photo</dt>
   <dd>
@@ -70,16 +74,17 @@
 </table>
 
 <h3>Add a new comment</h3>
+<form action=“/insert_comment_record” method=“post”>
 
-<form action="/insert_comment_record" method="post">
-  <input id="browser_photo_id" type="hidden" value="<%= @photo.id %>" name="input_photo_id">
-    # the type is hidden because we need it to associate the photo with a user id
+  <label for=“browser_photo_id”>Photo ID</label>
+  <input id=“browser_photo_id” type=“text” value=“<%= @photo.id %>” name=“input_photo_id”>
+      # the type is hidden because we need it to associate the photo with a user id
 
-  # I will commene this to note that it should be deleted as the controllers section was updated <label for="browser_author_id">Author ID</label>
-  # I will commene this to note that it should be deleted as the controllers section was updated <input id="browser_author_id" type="text" name="input_author_id">
+  <label for=“browser_author_id”>Author ID</label>
+  <input id=“browser_author_id” type=“text” name=“input_author_id”>
 
-  <label for="browser_comment">Comment</label>
-  <textarea id="browser_comment" name="input_body" placeholder="Enter a comment..."></textarea>
+  <label for=“browser_comment”>Comment</label>
+  <textarea id=“browser_comment” name=“input_body” placeholder=“Enter a comment...“></textarea>
 
   <button>Add comment</button>
 </form>

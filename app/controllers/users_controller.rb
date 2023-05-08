@@ -4,19 +4,19 @@ class UsersController < ApplicationController
     un = params.fetch("input_username")
     pw = params.fetch("input_password")
     
-    user = User.where({ :username => un }).at (0)
+    user = User.where({ :username => un}).at(0)
 
     if user == nil 
-      redirect_to("/user_sign_in", { :alert => "No one has that account."})
+      redirect_to("/user_sign_in", { :alert => "No one has that account." })
     else 
       if user.authenticate(pw)
-        session.store( :user_id,user.id )
+        session.store( :user_id, user.id )
         redirect_to("/", { notice => "Welcome back, " + user.username + "!" })
       #if there is a record, check to see if password matched
       #this returns the record, not true
       #this will be truth or false
       else
-        redirect_to("user_sign_in", { :alert => "Try again."})
+        redirect_to("/user_sign_in", { :alert => "Try again."})
       #if not, redirect to sign in form 
       end
     end
@@ -62,7 +62,7 @@ class UsersController < ApplicationController
 
     if save_status == true
       session.store(:user_id, user.id)
-     redirect_to("/users/#{user.username}", { :notice => "Welcome, " + user.username + "!" })
+      redirect_to("/users/#{user.username}", { :notice => "Welcome, " + user.username + "!" })
     else
       redirect_to("/user_sign_up", { :alert => user.errors.full_messages.to_sentence })
     end
