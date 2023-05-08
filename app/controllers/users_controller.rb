@@ -1,7 +1,41 @@
 class UsersController < ApplicationController
+  
+  def authenticate
+    un = params.fetch("input_username")
+    pw = params.fetch("input_password")
+    
+    user = User.where({ :username => un }).at (0)
+
+    if user == nil 
+      redirect_to("/user_sign_in", { :alert => "No one has that account."})
+    else 
+      if user.authenticate(pw)
+        session.store( :user_id,user.id )
+        redirect_to("/", { notice => "Welcome back, " + user.username + "!" })
+      #if there is a record, check to see if password matched
+      #this returns the record, not true
+      #this will be truth or false
+      else
+        redirect_to("user_sign_in", { :alert => "Try again."})
+      #if not, redirect to sign in form 
+      end
+    end
+  end
+
+  def toast_cookies
+    reset_session
+    # this method will loop through and delete every cookie and key in that hash 
+    redirect_to("/", :notice => "See you later!")
+  end
+  
   def new_registration_form
 
     render({ :template => "users/signup_form.html.erb" })
+  end
+
+  def new_session_form
+
+    render({ :template => "users/signin_form.html.erb" })
   end
   
   def index
@@ -27,6 +61,7 @@ class UsersController < ApplicationController
     save_status = user.save
 
     if save_status == true
+      session.store(:user_id, user.id)
      redirect_to("/users/#{user.username}", { :notice => "Welcome, " + user.username + "!" })
     else
       redirect_to("/user_sign_up", { :alert => user.errors.full_messages.to_sentence })
